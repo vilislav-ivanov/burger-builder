@@ -42,13 +42,30 @@ module.exports = function makeOrder(orderInfo = requiredParams('orderInfo')) {
       meat,
       bacon,
       salad,
-      heese,
+      cheese,
       ...otherInfo,
     };
   }
-  function normalize({ firstName, lastName, email, ...orderInfo }) {
+  function normalize({
+    price,
+    firstName,
+    lastName,
+    meat,
+    bacon,
+    salad,
+    cheese,
+    email,
+    ...other
+  }) {
     return {
-      ...orderInfo,
+      ...other,
+      price: Number(price),
+      ingredients: {
+        meat: Number(meat),
+        bacon: Number(bacon),
+        salad: Number(salad),
+        cheese: Number(cheese),
+      },
       firstName: upperFirst(firstName),
       lastName: upperFirst(lastName),
       email: email.toLowerCase(),

@@ -4,6 +4,7 @@ const passport = require('passport');
 
 const { port } = require('./config/keys');
 const orderRouter = require('./routes/order');
+const orederRouterRefactored = require('./orders/route');
 const userAuthRouter = require('./routes/auth/user');
 const adminAuthRouter = require('./routes/auth/admin');
 
@@ -17,6 +18,7 @@ require('./config/passportConfig')(passport); // configure passport
 app.use('/order', orderRouter);
 app.use('/auth/user', userAuthRouter);
 app.use('/auth/admin', adminAuthRouter);
+app.use('/api/order', orederRouterRefactored);
 
 app.listen(port, () => {
   console.log('App up and running at port: ' + port);

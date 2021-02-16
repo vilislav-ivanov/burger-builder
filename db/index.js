@@ -5,10 +5,13 @@ function makeIdFromString(id) {
   return new mongodb.ObjectID(id);
 }
 
-module.exports = function () {
+module.exports = async function () {
   const MongoClient = mongodb.MongoClient;
-  const client = new MongoClient(mongoUrl, { useNewUrlParser: true });
-  client.connect();
+  const client = new MongoClient(mongoUrl, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
+  await client.connect();
   const db = client.db(dbName);
   db.makeId = makeIdFromString;
   return db;
