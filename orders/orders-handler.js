@@ -22,12 +22,11 @@ module.exports = function makeOrdersEndPoint(orderRepo) {
     }
   };
 
-  async function handlePost({ id = false, body }) {
+  async function handlePost({ pathParams, body }) {
+    const { id = false } = pathParams;
     try {
-      const order = id === false ? makeOrder(body) : null; // no id = creating a new order
-      console.log(order);
       const result = id
-        ? await orderRepo.edit({ ...body })
+        ? await orderRepo.edit({ ...body, orderId: id })
         : await orderRepo.create({ ...order });
       return {
         headers: {
@@ -37,7 +36,6 @@ module.exports = function makeOrdersEndPoint(orderRepo) {
         data: JSON.stringify(result),
       };
     } catch (error) {
-      console.log(error.message);
       return makeHttpError({
         statusCode:
           error instanceof InvalidPropertyError ||
