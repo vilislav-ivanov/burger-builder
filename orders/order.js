@@ -5,6 +5,7 @@ const isValidEmail = require('../helpers/is-valid-email');
 const upperFirst = require('../helpers/upper-first');
 
 module.exports = function makeOrder(orderInfo = requiredParams('orderInfo')) {
+  console.log(orderInfo);
   const validOrder = validate(orderInfo);
   const normalOrder = normalize(validOrder);
   return Object.freeze(normalOrder);

@@ -57,7 +57,21 @@ module.exports = function makeOrdersEndPoint(orderRepo) {
       });
     }
   }
-  function handleGet(httpRequest) {}
+  async function handleGet({ pathParams }) {
+    const { id } = pathParams;
+    try {
+      const result = id ? null : await orderRepo.getAll();
+      return {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        statusCode: 200,
+        data: JSON.stringify(result),
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  }
   async function handleDelete({ pathParams }) {
     const { id = false } = pathParams;
     try {

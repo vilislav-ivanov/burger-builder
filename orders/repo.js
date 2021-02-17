@@ -22,7 +22,18 @@ module.exports = function (database) {
       order: ops[0],
     };
   }
-  function getAll() {}
+  async function getAll() {
+    const db = await database;
+    try {
+      const result = await db.collection('orders').find().toArray();
+      return {
+        success: result instanceof Array,
+        orders: result.map(mapDocumentToOrder),
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
   function getCurrentUserOrders() {}
   async function edit({ orderId, ...orderInfo }) {
     const db = await database;
