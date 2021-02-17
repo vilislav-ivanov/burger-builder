@@ -10,7 +10,6 @@ module.exports = function (database) {
     create,
     getAll,
     getById,
-    getCurrentUserOrders,
     edit,
     remove,
   });
@@ -49,7 +48,6 @@ module.exports = function (database) {
       throw new DocumentNotFoundError(orderId);
     }
   }
-  function getCurrentUserOrders() {}
   async function edit({ orderId, ...orderInfo }) {
     const db = await database;
     const order = {

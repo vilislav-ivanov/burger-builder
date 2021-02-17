@@ -16,7 +16,10 @@ module.exports = function makeOrdersEndPoint(orderRepo) {
       case 'DELETE':
         return handleDelete(httpRequest);
       default:
-        // todo:return object with header, statusCode, body
+        return makeHttpError({
+          statusCode: 405,
+          errorMessage: `${httpRequest.method} method not allowed`,
+        });
         break;
     }
   };
