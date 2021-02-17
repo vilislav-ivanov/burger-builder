@@ -1,3 +1,4 @@
+const { DocumentNotFoundError } = require('../helpers/errors');
 const makeOrder = require('./order');
 
 function mapDocumentToOrder({ ...orderDocument }) {
@@ -36,13 +37,35 @@ module.exports = function (database) {
         .findOneAndUpdate({ _id: db.makeId(orderId) }, order, {
           returnOriginal: false,
         });
-      return {
-        success: result.ok === 1,
-        order: mapDocumentToOrder(result.value),
-      };
+
+      if (result.value) {
+        return {
+          success: result.ok === 1,
+          order: mapDocumentToOrder(result.value),
+        };
+      } else {
+        throw new DocumentNotFoundError(orderId);
+      }
     } catch (error) {
       throw error;
     }
   }
-  function remove() {}
+  async function remove(orderId) {
+    const db = await database;
+    try {
+      const result = await db
+        .collection('orders')
+        .findOneAndDelete({ _id: db.makeId(orderId) });
+      if (result.value) {
+        return {
+          success: result.ok === 1,
+          deletedOrder: mapDocumentToOrder(result.value),
+        };
+      } else {
+        throw new DocumentNotFoundError(orderId);
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
 };

@@ -16,10 +16,7 @@ module.exports = function makeOrder(orderInfo = requiredParams('orderInfo')) {
     email = requiredParams('email'),
     address = requiredParams('address'),
     postalCode = requiredParams('postalCode'),
-    meat = requiredParams('meat'),
-    bacon = requiredParams('bacon'),
-    salad = requiredParams('salad'),
-    cheese = requiredParams('cheese'),
+    ingredients = requiredParams('ingredients'),
     ...otherInfo
   }) {
     validateName('firstNmae', firstName);
@@ -27,6 +24,12 @@ module.exports = function makeOrder(orderInfo = requiredParams('orderInfo')) {
     validateEmail(email);
     validateNumeric('postalCode', postalCode);
     validateNumeric('price', price);
+    const {
+      meat = requiredParams('meat'),
+      bacon = requiredParams('bacon'),
+      salad = requiredParams('salad'),
+      cheese = requiredParams('cheese'),
+    } = ingredients;
     validateNumeric('meat', meat);
     validateNumeric('bacon', bacon);
     validateNumeric('salad', salad);

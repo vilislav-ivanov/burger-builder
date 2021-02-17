@@ -7,6 +7,7 @@ module.exports = async function orderController(req, res) {
     const { headers, statusCode, data } = await handleOrderRequest(httpRequest);
     return res.set(headers).status(statusCode).send(data);
   } catch (error) {
+    console.log(error);
     return res.status(500).end();
   }
 };
