@@ -60,7 +60,9 @@ module.exports = function makeOrdersEndPoint(orderRepo) {
   async function handleGet({ pathParams }) {
     const { id } = pathParams;
     try {
-      const result = id ? null : await orderRepo.getAll();
+      const result = id
+        ? await orderRepo.getById(id)
+        : await orderRepo.getAll();
       return {
         headers: {
           'Content-Type': 'application/json',
@@ -69,7 +71,10 @@ module.exports = function makeOrdersEndPoint(orderRepo) {
         data: JSON.stringify(result),
       };
     } catch (error) {
-      console.log(error);
+      return makeHttpError({
+        statusCode: error instanceof DocumentNotFoundError ? 404 : 500,
+        errorMessage: error.message,
+      });
     }
   }
   async function handleDelete({ pathParams }) {

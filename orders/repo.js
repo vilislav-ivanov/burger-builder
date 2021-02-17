@@ -9,6 +9,7 @@ module.exports = function (database) {
   return Object.freeze({
     create,
     getAll,
+    getById,
     getCurrentUserOrders,
     edit,
     remove,
@@ -32,6 +33,20 @@ module.exports = function (database) {
       };
     } catch (error) {
       throw error;
+    }
+  }
+  async function getById(orderId) {
+    const db = await database;
+    const result = await db
+      .collection('orders')
+      .findOne({ _id: db.makeId(orderId) });
+    if (result) {
+      return {
+        success: true,
+        order: result,
+      };
+    } else {
+      throw new DocumentNotFoundError(orderId);
     }
   }
   function getCurrentUserOrders() {}
