@@ -1,4 +1,6 @@
 const { makeToken } = require('../helpers/jwt');
+const { compareEncryptedPassword } = require('../helpers/bcrypt');
+const { WrongCredentialsError } = require('../helpers/errors');
 
 module.exports = function (database) {
   return Object.freeze({
@@ -10,7 +12,7 @@ module.exports = function (database) {
     const db = await database;
     const { ops, result } = await db
       .collection('users')
-      .insertOne({ emailAddress, hashedPassword });
+      .insertOne({ emailAddress, password: hashedPassword });
     const token = await makeToken({
       userId: ops[0]._id,
       emailAddress: ops[0].emailAddress,
@@ -20,10 +22,23 @@ module.exports = function (database) {
       token: `Bearer: ${token}`,
     };
   }
-  function login({ emailAddress, password }) {
-    return {
-      emailAddress,
-      password,
-    };
+  async function login({ emailAddress, password }) {
+    const db = await database;
+    const result = await db
+      .collection('users')
+      .findOne({ emailAddress: emailAddress });
+    if (result && (await compareEncryptedPassword(result.password, password))) {
+      const token = await makeToken({
+        userId: result._id,
+        emailAddress: result.emailAddress,
+      });
+      return {
+        success: true,
+        token: `Bearer: ${token}`,
+      };
+    } else {
+      // in case wrong email or wrong password
+      throw new WrongCredentialsError();
+    }
   }
 };

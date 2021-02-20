@@ -1,6 +1,6 @@
-const bcrypt = require('bcrypt');
 const { InvalidPropertyError } = require('../helpers/errors');
 const isValidEmail = require('../helpers/is-valid-email');
+const { hashPassword } = require('../helpers/bcrypt');
 
 const requiredParams = require('../helpers/required-params');
 
@@ -28,16 +28,10 @@ async function makeRegister(registerInfo = requiredParams('registerInfo')) {
   }
 
   async function normalize({ emailAddress, password }) {
-    try {
-      const salt = await bcrypt.genSalt(10);
-      const encrypted = await bcrypt.hash(password, salt);
-      return {
-        emailAddress: emailAddress.toLowerCase(),
-        hashedPassword: encrypted,
-      };
-    } catch (error) {
-      throw error;
-    }
+    return {
+      emailAddress: emailAddress.toLowerCase(),
+      hashedPassword: await hashPassword(password),
+    };
   }
 }
 
