@@ -20,5 +20,10 @@ module.exports = function (database) {
       token: `Bearer: ${token}`,
     };
   }
-  function login({ emailAddress, password }) {}
+  function login({ emailAddress, password }) {
+    return {
+      emailAddress,
+      password,
+    };
+  }
 };

@@ -1,15 +1,15 @@
-const { makeRegister } = require('./auth');
 const makeHttpError = require('../helpers/http-error');
+const { makeLogin } = require('./auth');
 const {
   InvalidPropertyError,
   RequiredParamsError,
 } = require('../helpers/errors');
 
-module.exports = function makeRegisterHandler(repo) {
-  return async function handleRegister(httpRequest) {
+module.exports = function makeLoginHandler(repo) {
+  return async function loginHandler(httpRequest) {
     switch (httpRequest.method) {
       case 'POST':
-        return register(httpRequest);
+        return login(httpRequest);
       default:
         return makeHttpError({
           statusCode: 405,
@@ -17,10 +17,10 @@ module.exports = function makeRegisterHandler(repo) {
         });
     }
   };
-  async function register({ body }) {
+  async function login({ body }) {
     try {
-      const registerInfo = await makeRegister(body);
-      const result = await repo.register(registerInfo);
+      const loginInfo = makeLogin(body);
+      const result = await repo.login(loginInfo);
       return {
         headers: {
           'Content-Type': 'application/json',
