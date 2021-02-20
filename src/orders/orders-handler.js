@@ -1,5 +1,5 @@
 const {
-  DocumentNotFoundError,
+  NotFoundError,
   InvalidPropertyError,
   RequiredParamsError,
 } = require('../helpers/errors');
@@ -51,8 +51,8 @@ module.exports = function makeOrdersEndPoint(orderRepo) {
         statusCode:
           error instanceof InvalidPropertyError ||
           error instanceof RequiredParamsError ||
-          error instanceof DocumentNotFoundError
-            ? error instanceof DocumentNotFoundError
+          error instanceof NotFoundError
+            ? error instanceof NotFoundError
               ? 404
               : 400
             : 500,
@@ -75,7 +75,7 @@ module.exports = function makeOrdersEndPoint(orderRepo) {
       };
     } catch (error) {
       return makeHttpError({
-        statusCode: error instanceof DocumentNotFoundError ? 404 : 500,
+        statusCode: error instanceof NotFoundError ? 404 : 500,
         errorMessage: error.message,
       });
     }
@@ -91,7 +91,7 @@ module.exports = function makeOrdersEndPoint(orderRepo) {
       };
     } catch (error) {
       return makeHttpError({
-        statusCode: error instanceof DocumentNotFoundError ? 404 : 500,
+        statusCode: error instanceof NotFoundError ? 404 : 500,
         errorMessage: error.message,
       });
     }

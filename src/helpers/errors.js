@@ -28,12 +28,22 @@ class RequiredParamsError extends Error {
   }
 }
 
-class DocumentNotFoundError extends Error {
-  constructor(docId) {
-    super(`${docId} was not found in db.`);
+class NotFoundError extends Error {
+  constructor(prop) {
+    super(`${prop} was not found in db.`);
 
     if (Error.captureStackTrace) {
-      Error.captureStackTrace(this, DocumentNotFoundError);
+      Error.captureStackTrace(this, NotFoundError);
+    }
+  }
+}
+
+class WrongCredentialsError extends Error {
+  constructor() {
+    super(`wrong credentials.`);
+
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, WrongCredentialsError);
     }
   }
 }
@@ -42,5 +52,6 @@ module.exports = {
   UniqueConstraintError,
   InvalidPropertyError,
   RequiredParamsError,
-  DocumentNotFoundError,
+  NotFoundError,
+  WrongCredentialsError,
 };

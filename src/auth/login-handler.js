@@ -3,6 +3,7 @@ const { makeLogin } = require('./auth');
 const {
   InvalidPropertyError,
   RequiredParamsError,
+  WrongCredentialsError,
 } = require('../helpers/errors');
 
 module.exports = function makeLoginHandler(repo) {
@@ -32,7 +33,8 @@ module.exports = function makeLoginHandler(repo) {
       return makeHttpError({
         statusCode:
           error instanceof InvalidPropertyError ||
-          error instanceof RequiredParamsError
+          error instanceof RequiredParamsError ||
+          error instanceof WrongCredentialsError
             ? 400
             : 500,
         errorMessage: error.message,

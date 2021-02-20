@@ -1,4 +1,4 @@
-const { DocumentNotFoundError } = require('../helpers/errors');
+const { NotFoundError } = require('../helpers/errors');
 const makeOrder = require('./order');
 
 function mapDocumentToOrder({ ...orderDocument }) {
@@ -45,7 +45,7 @@ module.exports = function (database) {
         order: result,
       };
     } else {
-      throw new DocumentNotFoundError(orderId);
+      throw new NotFoundError(orderId);
     }
   }
   async function edit({ orderId, ...orderInfo }) {
@@ -68,7 +68,7 @@ module.exports = function (database) {
           order: mapDocumentToOrder(result.value),
         };
       } else {
-        throw new DocumentNotFoundError(orderId);
+        throw new NotFoundError(orderId);
       }
     } catch (error) {
       throw error;
@@ -86,7 +86,7 @@ module.exports = function (database) {
           deletedOrder: mapDocumentToOrder(result.value),
         };
       } else {
-        throw new DocumentNotFoundError(orderId);
+        throw new NotFoundError(orderId);
       }
     } catch (error) {
       throw error;
