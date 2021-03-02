@@ -3,6 +3,7 @@ const makeHttpError = require('../helpers/http-error');
 const {
   InvalidPropertyError,
   RequiredParamsError,
+  UniqueConstraintError,
 } = require('../helpers/errors');
 
 module.exports = function makeRegisterHandler(repo) {
@@ -32,8 +33,11 @@ module.exports = function makeRegisterHandler(repo) {
       return makeHttpError({
         statusCode:
           error instanceof InvalidPropertyError ||
-          error instanceof RequiredParamsError
-            ? 400
+          error instanceof RequiredParamsError ||
+          error instanceof UniqueConstraintError
+            ? error instanceof UniqueConstraintError
+              ? 409
+              : 400
             : 500,
         errorMessage: error.message,
       });
