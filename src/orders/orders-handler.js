@@ -26,18 +26,10 @@ module.exports = function makeOrdersEndPoint(orderRepo) {
 
   async function handlePost({ pathParams, body }) {
     const { id = false } = pathParams;
-    let order;
-    if (!id) {
-      body.ingredients = {};
-      body.ingredients.meat = body.meat || 0;
-      body.ingredients.bacon = body.bacon || 0;
-      body.ingredients.cheese = body.cheese || 0;
-      body.ingredients.salad = body.salad || 0;
-      order = makeOrder(body);
-    }
     try {
+      const order = makeOrder(body);
       const result = id
-        ? await orderRepo.edit({ ...body, orderId: id })
+        ? await orderRepo.edit({ ...order, orderId: id })
         : await orderRepo.create({ ...order });
       return {
         headers: {

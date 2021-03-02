@@ -50,6 +50,7 @@ module.exports = function (database) {
   }
   async function edit({ orderId, ...orderInfo }) {
     const db = await database;
+
     const order = {
       $set: {
         ...orderInfo,

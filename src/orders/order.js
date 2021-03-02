@@ -17,19 +17,13 @@ module.exports = function makeOrder(orderInfo = requiredParams('orderInfo')) {
     address = requiredParams('address'),
     postalCode = requiredParams('postalCode'),
     ingredients = requiredParams('ingredients'),
-    ...otherInfo
   }) {
     validateName('firstNmae', firstName);
     validateName('lastName', lastName);
     validateEmail(email);
     validateNumeric('postalCode', postalCode);
     validateNumeric('price', price);
-    const {
-      meat = requiredParams('meat'),
-      bacon = requiredParams('bacon'),
-      salad = requiredParams('salad'),
-      cheese = requiredParams('cheese'),
-    } = ingredients;
+    const { meat = 0, bacon = 0, salad = 0, cheese = 0 } = ingredients;
     validateNumeric('meat', meat);
     validateNumeric('bacon', bacon);
     validateNumeric('salad', salad);
@@ -42,24 +36,23 @@ module.exports = function makeOrder(orderInfo = requiredParams('orderInfo')) {
       email,
       address,
       postalCode,
-      meat,
-      bacon,
-      salad,
-      cheese,
-      ...otherInfo,
+      ingredients: {
+        meat,
+        bacon,
+        salad,
+        cheese,
+      },
     };
   }
   function normalize({
     price,
     firstName,
     lastName,
-    meat,
-    bacon,
-    salad,
-    cheese,
     email,
+    ingredients,
     ...other
   }) {
+    const { meat, bacon, salad, cheese } = ingredients;
     return {
       ...other,
       price: Number(price),
