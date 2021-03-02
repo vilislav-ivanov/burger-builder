@@ -8,12 +8,13 @@ const orederRouterRefactored = require('./orders/route');
 const authRouterRefactored = require('./auth/route');
 const userAuthRouter = require('./routes/auth/user');
 const adminAuthRouter = require('./routes/auth/admin');
+const makeDb = require('./db');
 
 // Connect middlewares
 app.use(express.json()); // for parsing application/json
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(passport.initialize()); // initialize passport
-require('./config/passportConfig')(passport); // configure passport
+require('./config/passportConfig')(passport, makeDb()); // configure passport
 
 // connect routes
 app.use('/order', orderRouter);
