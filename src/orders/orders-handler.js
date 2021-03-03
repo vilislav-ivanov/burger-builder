@@ -52,12 +52,13 @@ module.exports = function makeOrdersEndPoint(orderRepo) {
       });
     }
   }
-  async function handleGet({ pathParams }) {
+  async function handleGet({ pathParams, user }) {
     const { id } = pathParams;
+    const emailAddress = !user.isAdmin ? user.emailAddress : null;
     try {
       const result = id
         ? await orderRepo.getById(id)
-        : await orderRepo.getAll();
+        : await orderRepo.getAll({ emailAddress });
       return {
         headers: {
           'Content-Type': 'application/json',

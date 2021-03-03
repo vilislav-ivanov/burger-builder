@@ -22,10 +22,12 @@ module.exports = function (database) {
       order: ops[0],
     };
   }
-  async function getAll() {
+  async function getAll({ emailAddress }) {
+    const filter = {};
+    emailAddress ? (filter.emailAddress = emailAddress) : null;
     const db = await database;
     try {
-      const result = await db.collection('orders').find().toArray();
+      const result = await db.collection('orders').find(filter).toArray();
       return {
         success: result instanceof Array,
         orders: result.map(mapDocumentToOrder),

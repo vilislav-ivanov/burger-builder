@@ -15,7 +15,7 @@ module.exports = function (database) {
     const db = await database;
     const { ops, result } = await db
       .collection('users')
-      .insertOne({ emailAddress, password: hashedPassword })
+      .insertOne({ emailAddress, password: hashedPassword, isAdmin: false })
       .catch((err) => {
         const duplicateKeyErrorCode = 11000;
         if (err.code == duplicateKeyErrorCode) {
