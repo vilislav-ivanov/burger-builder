@@ -13,7 +13,7 @@ const BurgerBuilder = ({
   price,
   addIngredient,
   removeIngredient,
-  ingredientsAvailability,
+  hasIngredients,
 }) => {
   // Setting history
   const history = useHistory();
@@ -51,7 +51,7 @@ const BurgerBuilder = ({
         addIngredients={addIngredient}
         removeIngredients={removeIngredient}
         hasIngredient={hasIngredient}
-        disableOrderButton={ingredientsAvailability}
+        disableOrderButton={hasIngredients}
         onOrderClicked={handleDisplayModal}
       />
     </Fragment>
@@ -62,7 +62,7 @@ const mapStateToProps = (state) => {
   return {
     ingredients: state.burger.ingredients,
     price: state.burger.price,
-    ingredientsAvailability: state.burger.ingredientsAvailability,
+    hasIngredients: state.burger.hasIngredients,
   };
 };
 

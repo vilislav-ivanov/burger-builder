@@ -5,11 +5,11 @@ import { connect } from 'react-redux';
 import Button from '../../../components/UI/Button/Button';
 import Input from '../../../components/UI/Input/Input';
 import axios from '../../../axios';
-import { addOrderAsync } from '../../../actions';
+import { addOrder } from '../../../actions';
 import withErrorHandler from '../../../hoc/withErrorHandler';
 import './ContactData.css';
 
-const ContactData = ({ ingredients, price, emailAddress, addOrderAsync }) => {
+const ContactData = ({ ingredients, price, emailAddress, addOrder }) => {
   const history = useHistory();
   const [contactData, setContactData] = useState({
     firstName: {
@@ -203,7 +203,7 @@ const ContactData = ({ ingredients, price, emailAddress, addOrderAsync }) => {
       deliveryMethod: contactData.deliveryMethod.value,
     };
 
-    addOrderAsync(orderData);
+    addOrder(orderData);
     history.push('/orders');
   };
 
@@ -244,6 +244,6 @@ const mapStateToProps = (state) => ({
   emailAddress: state.auth.emailAddress,
 });
 
-export default connect(mapStateToProps, { addOrderAsync })(
+export default connect(mapStateToProps, { addOrder })(
   withErrorHandler(ContactData, axios)
 );

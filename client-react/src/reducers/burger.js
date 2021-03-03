@@ -18,10 +18,10 @@ const initialState = {
     bacon: 0.5,
   },
   price: 0.7,
-  ingredientsAvailability: false,
+  hasIngredients: false,
 };
 
-const checkIngredientsAvailability = (ingredients) => {
+const checkHasIngredients = (ingredients) => {
   const ingredientsCount = Object.values(ingredients).reduce(
     (prevValue, value) => {
       return prevValue + value;
@@ -43,9 +43,7 @@ const burgerReducer = (state = initialState, action) => {
         ...state,
         ingredients: updatedIngredients,
         price: state.price + state.ingredientsPrice[action.ingredeintType],
-        ingredientsAvailability: checkIngredientsAvailability(
-          updatedIngredients
-        ),
+        hasIngredients: checkHasIngredients(updatedIngredients),
       };
       return updatedState;
     }
@@ -64,9 +62,7 @@ const burgerReducer = (state = initialState, action) => {
           state.price - state.ingredientsPrice[action.ingredeintType] > 0
             ? state.price - state.ingredientsPrice[action.ingredeintType]
             : 0,
-        ingredientsAvailability: checkIngredientsAvailability(
-          updatedIngredients
-        ),
+        hasIngredients: checkHasIngredients(updatedIngredients),
       };
       return updatedState;
     }
@@ -86,7 +82,7 @@ const burgerReducer = (state = initialState, action) => {
           bacon: 0.5,
         },
         price: 0.7,
-        ingredientsAvailability: false,
+        hasIngredients: false,
       };
     }
     default:
