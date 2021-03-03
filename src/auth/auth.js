@@ -64,7 +64,9 @@ function makeLogin(loginInfo = requiredParams('loginInfo')) {
 
 function validateEmail(emailAddress) {
   if (!isValidEmail(emailAddress)) {
-    throw new InvalidPropertyError(`${email} is not valid email address.`);
+    throw new InvalidPropertyError(
+      `${emailAddress} is not valid email address.`
+    );
   }
 }
 function validatePassword(password, label) {
