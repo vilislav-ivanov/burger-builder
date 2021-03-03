@@ -9,16 +9,16 @@ import { addOrderAsync } from '../../../actions';
 import withErrorHandler from '../../../hoc/withErrorHandler';
 import './ContactData.css';
 
-const ContactData = ({ ingredients, price, email, handleOrder }) => {
+const ContactData = ({ ingredients, price, emailAddress, addOrderAsync }) => {
   const history = useHistory();
   const [contactData, setContactData] = useState({
-    name: {
+    firstName: {
       inputType: 'input',
       value: '',
-      label: 'Name',
+      label: 'First Name',
       config: {
         type: 'text',
-        placeholder: 'Your Name',
+        placeholder: 'Your First Name',
       },
       validation: {
         required: {
@@ -27,25 +27,43 @@ const ContactData = ({ ingredients, price, email, handleOrder }) => {
         },
         valid: false,
         touched: false,
-        errorMessage: 'Name must be between 2 and 20 symbols',
+        errorMessage: 'First name must be between 2 and 20 symbols',
       },
     },
-    email: {
+    lastName: {
       inputType: 'input',
       value: '',
-      label: 'Email',
+      label: 'Last Name',
       config: {
-        type: 'email',
-        placeholder: 'Your Mail',
+        type: 'text',
+        placeholder: 'Your Last Name',
       },
       validation: {
         required: {
-          minLength: 5,
+          minLength: 2,
           maxLength: 20,
         },
         valid: false,
         touched: false,
-        errorMessage: 'Email must be between 5 and 20 symbols',
+        errorMessage: 'Last name must be between 2 and 20 symbols',
+      },
+    },
+    emailAddress: {
+      inputType: 'input',
+      value: '',
+      label: 'emailAddress',
+      config: {
+        type: 'emailAddress',
+        placeholder: 'Your Mail',
+      },
+      validation: {
+        required: {
+          minLength: 6,
+          maxLength: 40,
+        },
+        valid: false,
+        touched: false,
+        errorMessage: 'Email Address must be between 6 and 40 symbols',
       },
     },
     address: {
@@ -107,11 +125,11 @@ const ContactData = ({ ingredients, price, email, handleOrder }) => {
   useEffect(() => {
     setContactData({
       ...contactData,
-      email: {
-        ...contactData.email,
-        value: email,
+      emailAddress: {
+        ...contactData.emailAddress,
+        value: emailAddress,
         validation: {
-          ...contactData.email.validation,
+          ...contactData.emailAddress.validation,
           valid: true,
         },
       },
@@ -177,14 +195,15 @@ const ContactData = ({ ingredients, price, email, handleOrder }) => {
         ...ingredients,
       },
       price: +price.toFixed(2),
-      name: contactData.name.value,
-      email: contactData.email.value,
+      firstName: contactData.firstName.value,
+      lastName: contactData.lastName.value,
+      emailAddress: contactData.emailAddress.value,
       address: contactData.address.value,
       postalCode: contactData.postalCode.value,
       deliveryMethod: contactData.deliveryMethod.value,
     };
 
-    handleOrder(orderData);
+    addOrderAsync(orderData);
     history.push('/orders');
   };
 
@@ -222,16 +241,9 @@ const ContactData = ({ ingredients, price, email, handleOrder }) => {
 };
 
 const mapStateToProps = (state) => ({
-  email: state.auth.email,
+  emailAddress: state.auth.emailAddress,
 });
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    handleOrder: (orderData) => dispatch(addOrderAsync(orderData)),
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(withErrorHandler(ContactData, axios));
+export default connect(mapStateToProps, { addOrderAsync })(
+  withErrorHandler(ContactData, axios)
+);

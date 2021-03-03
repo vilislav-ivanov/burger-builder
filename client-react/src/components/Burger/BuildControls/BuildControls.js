@@ -14,7 +14,7 @@ const buildControls = ({
   price,
   addIngredients,
   removeIngredients,
-  ingredientAvailability,
+  hasIngredient,
   disableOrderButton,
   onOrderClicked,
 }) => {
@@ -28,7 +28,7 @@ const buildControls = ({
             label={ctrl.label}
             onMoreClick={() => addIngredients(ctrl.type)}
             onLessClick={() => removeIngredients(ctrl.type)}
-            disabled={!ingredientAvailability(ctrl.type)}
+            disabled={!hasIngredient(ctrl.type)}
           />
         );
       })}

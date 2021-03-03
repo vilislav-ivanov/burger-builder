@@ -3,13 +3,12 @@ import Modal from '../components/UI/Modal/Modal';
 
 const withErrorHandler = (WrappedComponent, axios) => {
   return (props) => {
-    let reqInterceptor;
-    let resInterceptor;
-    reqInterceptor = axios.interceptors.request.use((req) => {
+    const [error, setError] = useState(null);
+    const reqInterceptor = axios.interceptors.request.use((req) => {
       setError(null);
       return req;
     });
-    resInterceptor = axios.interceptors.response.use(
+    const resInterceptor = axios.interceptors.response.use(
       (res) => res,
       (error) => {
         setError(error);
@@ -17,7 +16,6 @@ const withErrorHandler = (WrappedComponent, axios) => {
       }
     );
 
-    const [error, setError] = useState(null);
     useEffect(() => {
       return () => {
         axios.interceptors.request.eject(reqInterceptor);
@@ -32,7 +30,7 @@ const withErrorHandler = (WrappedComponent, axios) => {
     return (
       <Fragment>
         <Modal show={error} onClick={errorConfirmedHandler}>
-          {error ? error.message : null}
+          {error ? error.response.data.error : null}
         </Modal>
         <WrappedComponent {...props} />
       </Fragment>

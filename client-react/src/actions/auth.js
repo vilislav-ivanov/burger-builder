@@ -23,13 +23,12 @@ export const clearLoading = () => {
   };
 };
 
-export const setAuth = (email, isAdmin) => {
+export const setAuth = (emailAddress) => {
   return {
     type: SET_AUTH,
     payload: {
-      isAuth: email ? true : false,
-      email: email,
-      isAdmin: isAdmin,
+      isAuth: emailAddress ? true : false,
+      emailAddress: emailAddress,
     },
   };
 };
@@ -51,79 +50,44 @@ export const setError = (err) => {
   };
 };
 
-export const register = ({ email, password, confirmPassword }) => {
-  return (dispatch) => {
+export const register = ({ emailAddress, password, confirmPassword }) => {
+  return async (dispatch) => {
     dispatch(setLoading());
-    axios
-      .post('/auth/user/register', { email, password, confirmPassword })
-      .then((response) => {
-        const token = response.data.token.split(' ')[1];
-        const decoded = jwtDecode(token);
-        addTokenToLocalStorage(token);
-        dispatch(setAuth(decoded.email, false));
-        dispatch(clearLoading());
-      })
-      .catch((err) => {
-        dispatch(clearLoading());
-        dispatch(setError(err));
+    try {
+      const response = await axios.post('/api/auth/register', {
+        emailAddress,
+        password,
+        confirmPassword,
       });
+      const token = response.data.token.split(' ')[1];
+      const decoded = jwtDecode(token);
+      addTokenToLocalStorage(token);
+      dispatch(setAuth(decoded.emailAddress));
+      dispatch(clearLoading());
+    } catch (err) {
+      dispatch(clearLoading());
+      dispatch(setError(err));
+    }
   };
 };
 
-export const registerAdmin = ({ email, password, confirmPassword }) => {
-  return (dispatch) => {
+export const login = ({ emailAddress, password }) => {
+  return async (dispatch) => {
     dispatch(setLoading());
-    axios
-      .post('/auth/admin/register', { email, password, confirmPassword })
-      .then((response) => {
-        const token = response.data.token.split(' ')[1];
-        const decoded = jwtDecode(token);
-        addTokenToLocalStorage(token);
-        dispatch(setAuth(decoded.email, decoded.isAdmin));
-        dispatch(clearLoading());
-      })
-      .catch((err) => {
-        dispatch(clearLoading());
-        dispatch(setError(err));
+    try {
+      const response = await axios.post('/api/auth/login', {
+        emailAddress,
+        password,
       });
-  };
-};
-
-export const login = ({ email, password }) => {
-  return (dispatch) => {
-    dispatch(setLoading());
-    axios
-      .post('/auth/user/login', { email, password })
-      .then((response) => {
-        const token = response.data.token.split(' ')[1];
-        const decoded = jwtDecode(token);
-        addTokenToLocalStorage(token);
-        dispatch(setAuth(decoded.email, false));
-        dispatch(clearLoading());
-      })
-      .catch((err) => {
-        dispatch(clearLoading());
-        dispatch(setError(err));
-      });
-  };
-};
-
-export const loginAdmin = ({ email, password }) => {
-  return (dispatch) => {
-    dispatch(setLoading());
-    axios
-      .post('/auth/admin/login', { email, password })
-      .then((response) => {
-        const token = response.data.token.split(' ')[1];
-        const decoded = jwtDecode(token);
-        addTokenToLocalStorage(token);
-        dispatch(setAuth(decoded.email, decoded.isAdmin));
-        dispatch(clearLoading());
-      })
-      .catch((err) => {
-        dispatch(clearLoading());
-        dispatch(setError(err));
-      });
+      const token = response.data.token.split(' ')[1];
+      const decoded = jwtDecode(token);
+      addTokenToLocalStorage(token);
+      dispatch(setAuth(decoded.emailAddress, false));
+      dispatch(clearLoading());
+    } catch (err) {
+      dispatch(clearLoading());
+      dispatch(setError(err));
+    }
   };
 };
 

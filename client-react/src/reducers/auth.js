@@ -2,7 +2,7 @@ import { CLEAR_AUTH, SET_AUTH, SET_AUTH_ERROR } from '../actions/types';
 
 const initialState = {
   isAuth: false,
-  email: null,
+  emailAddress: null,
   error: null,
   isAdmin: false,
 };
@@ -14,7 +14,7 @@ const authReducer = (state = initialState, action) => {
         ...state,
         isAuth: action.payload.isAuth,
         isAdmin: action.payload.isAdmin,
-        email: action.payload.email,
+        emailAddress: action.payload.emailAddress,
         error: null,
       };
     case CLEAR_AUTH:
@@ -22,7 +22,7 @@ const authReducer = (state = initialState, action) => {
         ...state,
         isAuth: false,
         isAdmin: false,
-        email: null,
+        emailAddress: null,
         error: null,
       };
     case SET_AUTH_ERROR:

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import jwtDecode from 'jwt-decode';
@@ -11,12 +11,12 @@ import Checkout from './containers/Checkout/Checkout';
 import Orders from './containers/Orders/Orders';
 import Authenticate from './containers/Authenticate/Authenticate';
 import Logout from './containers/Logout/Logout';
-import AdminDashboard from './containers/AdminDashboard/AdminDashboard';
+// import AdminDashboard from './containers/AdminDashboard/AdminDashboard';
 import { setAuth, logout } from './actions';
 
-function App({ setAuth, logout, isAuth, isAdmin }) {
-  const checkLocalStorageForToken = () => {
-    const tokenId = localStorage.getItem('tokenID');
+function App({ setAuth, logout, isAuth }) {
+  const tokenId = localStorage.getItem('tokenID');
+  useEffect(() => {
     if (tokenId) {
       const { email, iat, exp, isAdmin } = jwtDecode(tokenId);
       const tokenDuration = (exp - iat) * 1000;
@@ -25,8 +25,7 @@ function App({ setAuth, logout, isAuth, isAdmin }) {
         logout();
       }, tokenDuration);
     }
-  };
-  checkLocalStorageForToken();
+  }, [tokenId, setAuth, logout]);
   return (
     <Layout>
       <Switch>
@@ -43,9 +42,9 @@ function App({ setAuth, logout, isAuth, isAdmin }) {
         <Route path="/logout">
           {isAuth ? <Logout /> : <Redirect to="/" />}
         </Route>
-        <Route path="/admin-dashboard">
+        {/* <Route path="/admin-dashboard">
           {isAdmin ? <AdminDashboard /> : <Redirect to="/" />}
-        </Route>
+        </Route> */}
         <Route path="/">
           <BurgerBuilder />
         </Route>
@@ -57,11 +56,5 @@ const mapStateToProps = (state) => ({
   isAuth: state.auth.isAuth,
   isAdmin: state.auth.isAdmin,
 });
-const mapDispatchToProps = (dispatch) => ({
-  setAuth: (email, isAdmin) => dispatch(setAuth(email, isAdmin)),
-  logout: () => {
-    dispatch(logout());
-  },
-});
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps, { setAuth, logout })(App);

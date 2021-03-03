@@ -5,12 +5,12 @@ import Order from '../../components/Order/Order';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import axios from '../../axios';
 import withErrorHandler from '../../hoc/withErrorHandler';
-import { initiateOrdersAsync } from '../../actions';
+import { getAllOrders } from '../../actions';
 
-const Orders = ({ orders, initOrders }) => {
+const Orders = ({ orders, getAllOrders }) => {
   useEffect(() => {
-    initOrders();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    getAllOrders();
+  }, [getAllOrders]);
 
   let ingredientsDisplay = <Spinner />;
   if (orders) {
@@ -26,19 +26,10 @@ const Orders = ({ orders, initOrders }) => {
   return ingredientsDisplay;
 };
 
-const mapStateToProps = (state) => {
-  return {
-    orders: state.order.orders,
-  };
-};
+const mapStateToProps = (state) => ({
+  orders: state.order.orders,
+});
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    initOrders: () => dispatch(initiateOrdersAsync()),
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(withErrorHandler(Orders, axios));
+export default connect(mapStateToProps, { getAllOrders })(
+  withErrorHandler(Orders, axios)
+);

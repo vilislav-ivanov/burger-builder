@@ -20,7 +20,7 @@ const BurgerBuilder = ({
   // State
   const [displayModal, setDisplayModal] = useState(false);
 
-  const ingredientAvailability = (ingredient) => {
+  const hasIngredient = (ingredient) => {
     return ingredients[ingredient] > 0;
   };
   const handleDisplayModal = () => {
@@ -50,7 +50,7 @@ const BurgerBuilder = ({
         price={price}
         addIngredients={addIngredient}
         removeIngredients={removeIngredient}
-        ingredientAvailability={ingredientAvailability}
+        hasIngredient={hasIngredient}
         disableOrderButton={ingredientsAvailability}
         onOrderClicked={handleDisplayModal}
       />
@@ -65,11 +65,7 @@ const mapStateToProps = (state) => {
     ingredientsAvailability: state.burger.ingredientsAvailability,
   };
 };
-const mapDispatchToProps = (dispatch) => {
-  return {
-    addIngredient: (ing) => dispatch(addIngredient(ing)),
-    removeIngredient: (ing) => dispatch(removeIngredient(ing)),
-  };
-};
 
-export default connect(mapStateToProps, mapDispatchToProps)(BurgerBuilder);
+export default connect(mapStateToProps, { addIngredient, removeIngredient })(
+  BurgerBuilder
+);
