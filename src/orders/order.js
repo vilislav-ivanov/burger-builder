@@ -13,14 +13,15 @@ module.exports = function makeOrder(orderInfo = requiredParams('orderInfo')) {
     price = requiredParams('price'),
     firstName = requiredParams('firstName'),
     lastName = requiredParams('lastName'),
-    email = requiredParams('email'),
+    emailAddress = requiredParams('emailAddress'),
     address = requiredParams('address'),
     postalCode = requiredParams('postalCode'),
     ingredients = requiredParams('ingredients'),
+    ...other
   }) {
     validateName('firstNmae', firstName);
     validateName('lastName', lastName);
-    validateEmail(email);
+    validateEmail(emailAddress);
     validateNumeric('postalCode', postalCode);
     validateNumeric('price', price);
     const { meat = 0, bacon = 0, salad = 0, cheese = 0 } = ingredients;
@@ -30,10 +31,11 @@ module.exports = function makeOrder(orderInfo = requiredParams('orderInfo')) {
     validateNumeric('cheese', cheese);
     validateAddress(address);
     return {
+      ...other,
       price,
       firstName,
       lastName,
-      email,
+      emailAddress,
       address,
       postalCode,
       ingredients: {
@@ -48,7 +50,7 @@ module.exports = function makeOrder(orderInfo = requiredParams('orderInfo')) {
     price,
     firstName,
     lastName,
-    email,
+    emailAddress,
     ingredients,
     ...other
   }) {
@@ -64,7 +66,7 @@ module.exports = function makeOrder(orderInfo = requiredParams('orderInfo')) {
       },
       firstName: upperFirst(firstName),
       lastName: upperFirst(lastName),
-      email: email.toLowerCase(),
+      emailAddress: emailAddress.toLowerCase(),
     };
   }
 
@@ -80,9 +82,11 @@ module.exports = function makeOrder(orderInfo = requiredParams('orderInfo')) {
       throw new InvalidPropertyError(`${label} must be a number value.`);
     }
   }
-  function validateEmail(email) {
-    if (!isValidEmail(email)) {
-      throw new InvalidPropertyError(`${email} is not valid email address.`);
+  function validateEmail(emailAddress) {
+    if (!isValidEmail(emailAddress)) {
+      throw new InvalidPropertyError(
+        `${emailAddress} is not valid email address.`
+      );
     }
   }
   function validateAddress(address) {
