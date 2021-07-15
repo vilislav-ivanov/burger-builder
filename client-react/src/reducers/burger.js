@@ -67,7 +67,6 @@ const burgerReducer = (state = initialState, action) => {
       return updatedState;
     }
     case CLEAR_BURGER: {
-      console.log('CLEAR_BURGER');
       return {
         ingredients: {
           meat: 0,

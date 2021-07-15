@@ -8,7 +8,6 @@ module.exports = (req, res, next) => {
   // Only one admin user can be created
   User.findOne({ isAdmin: true })
     .then((user) => {
-      console.log(user);
       if (user) {
         return res.status(400).json({ admin: 'Admin already exists' });
       }
